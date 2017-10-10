@@ -5,7 +5,7 @@ package main;
 
 
 import logika.*;
-import uiText.TextoveRozhrani;
+import ui.TextoveRozhrani;
 
 /*******************************************************************************
  * Třída  Start je hlavní třídou projektu,

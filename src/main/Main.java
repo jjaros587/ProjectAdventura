@@ -21,7 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logika.*;
-import uiText.TextoveRozhrani;
+import ui.TextoveRozhrani;
 
 /**
  *
@@ -47,14 +47,13 @@ public class Main extends Application {
         dolniLista.getChildren().add(zadejPrikaz);
         borderPane.setBottom(dolniLista);
         
-        Scene scene = new Scene(borderPane, 300, 250);
+        Scene scene = new Scene(borderPane, 500, 400);
 
         primaryStage.setTitle("Adventura");
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
     /**
      * @param args the command line arguments
      */
@@ -74,5 +73,4 @@ public class Main extends Application {
             }
         }
     }
-
 }
