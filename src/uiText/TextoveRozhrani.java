@@ -1,4 +1,4 @@
-package ui;
+package uiText;
 
 import java.io.*;
 import java.util.Scanner;

@@ -10,35 +10,35 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logika.*;
-import ui.TextoveRozhrani;
-
+import uiText.TextoveRozhrani;
 
 /**
  *
  * @author xzenj02
  */
-public class Main extends Application {
+public class Main extends Application {  
+    
+    private TextArea centralText;
+    private IHra hra;
+    private TextField zadejPrikazTextField;
 
     @Override
     public void start(Stage primaryStage) {
-        IHra hra = new Hra();
         
         BorderPane borderPane = new BorderPane();
         
-        //-----Central--------------       
-        TextArea centralText = new TextArea();
+        // Text s prubehem hry  
         centralText.setText(hra.vratUvitani());
         centralText.setEditable(false);
         borderPane.setCenter(centralText);
@@ -47,9 +47,7 @@ public class Main extends Application {
         Label zadejPrikazLabel = new Label("Zadej prikaz: ");
         zadejPrikazLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         
-        TextField zadejPrikazTextField = new TextField("");
         zadejPrikazTextField.setOnAction(new EventHandler<ActionEvent>(){
-
             @Override
             public void handle(ActionEvent event){
                 String vstupniPrikaz = zadejPrikazTextField.getText();
@@ -63,23 +61,24 @@ public class Main extends Application {
                     zadejPrikazTextField.setEditable(false);
                     centralText.appendText(hra.vratEpilog());
                 }
-                        
-
             }
         });
-              
+        // Obrazek s mapou
+        FlowPane obrazekFlowPane = new FlowPane();
+        ImageView obrazekImageView = new ImageView(new Image(Main.class.getResourceAsStream(".*/zdroje.xyz"),300,300,false,true));
+        
+        
         FlowPane dolniLista = new FlowPane();
         dolniLista.setAlignment(Pos.CENTER);
         dolniLista.getChildren().addAll(zadejPrikazLabel,zadejPrikazTextField);
         borderPane.setBottom(dolniLista);
-        
-        
+              
         Scene scene = new Scene(borderPane, 500, 500);
 
         primaryStage.setTitle("Adventura");
-
         primaryStage.setScene(scene);
         primaryStage.show();
+        
         zadejPrikazTextField.requestFocus();
     }
     /**
