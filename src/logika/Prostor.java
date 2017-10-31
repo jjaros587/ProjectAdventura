@@ -26,6 +26,8 @@ public class Prostor {
     private Set<Prostor> vychody;
     private Map<String, Vec> veci;
     private Map<String, Postava> postavy;
+    private double posLeft;
+    private double posTop;
 
     
     //##########################################################################
@@ -39,11 +41,13 @@ public class Prostor {
      * @param popis Popis prostoru.
      * @param zamceno -  Udává, jestli je prostor zamčen nebo ne.
      */
-    public Prostor(String nazev, String popis) {
+    public Prostor(String nazev, String popis, double posLeft, double posTop) {
         this.nazev      = nazev;
         this.popis      = popis;
+        this.posLeft    = posLeft;
+        this.posTop     = posTop;
         this.zamceno    = zamceno;
-        this.viditelna  = viditelna;
+        this.viditelna  = viditelna;     
         vychody         = new HashSet<>();
         veci            = new HashMap<>();
         postavy         = new HashMap<>();
@@ -216,6 +220,13 @@ public class Prostor {
         
         return Collections.unmodifiableCollection(vychody);
     }
+    public double getPosLeft() {
+        return posLeft;
+    }
+
+    public double getPosTop() {
+        return posTop;
+    }
     /**
      *  Metoda nastaví východ z prostoru
      *
@@ -366,5 +377,5 @@ public class Prostor {
     public Postava vyberPostavu(String jmenoPostavy){
         
         return postavy.get(jmenoPostavy);
-    }
+    }   
 }

@@ -1,5 +1,7 @@
 package logika;
 import java.util.*;
+import utils.Observer;
+import utils.Subject;
 
 /**
  *  Class HerniPlan - třída představující mapu a stav adventury.
@@ -12,16 +14,14 @@ import java.util.*;
  *@author     Michael Kolling, Lubos Pavlicek, Jarmila Pavlickova
  *@version    pro školní rok 2015/2016
  */
-public class HerniPlan {
+public class HerniPlan implements Subject{
     
-    private Prostor aktualniProstor;
-
-    
-    private Vec klic;
-    
-    private Map<String, Prostor> prostory;
-    
+    private Prostor aktualniProstor;   
+    private Vec klic;    
+    private Map<String, Prostor> prostory;   
     private boolean prohra = false; 
+    
+    private List<Observer> listObserveru = new ArrayList<Observer>();
 
      /**
      *  Konstruktor který vytváří jednotlivé prostory a propojuje je pomocí východů.
@@ -43,18 +43,18 @@ public class HerniPlan {
         //== PROSTORY ======================================================
         prostory = new HashMap<>();
         this.prohra = prohra;
-        Prostor chaloupka   = new Prostor("chaloupka","Chaloupka, ve které si se narodil");
-        Prostor rozcesti    = new Prostor("rozcesti", "Rozcestí, které vede na mnoho míst");
-        Prostor les         = new Prostor("les","Les, kde se ukrývá medvěd. Pokud ho zabiješ, získáš peníze, za které si můžeš doplnit životy");
-        Prostor prikop      = new Prostor("prikop","Příkop, ve kterém je krokodýl, který hlídá vstup do hradu");
-        Prostor hrad        = new Prostor("hrad","Opuštěný hrad");
-        Prostor zbrojnice   = new Prostor("zbrojnice","Zbrojnice, ve které můžeš nalézt užitečné předměty");
-        Prostor kovarna     = new Prostor("kovarna","Kovárna, kde si můžeš nabrousit meč");
-        Prostor hospoda     = new Prostor("hospoda", "Hospoda, kde si můžeš dát pivo a doplnit si tak životy");
-        Prostor doupe       = new Prostor("doupe","Doupě, ve kterém žije trpaslík");
-        Prostor skrys       = new Prostor("skrys","Skrýš s dědictvím");
-        Prostor jeskyne     = new Prostor("jeskyne","Jeskyně, kde přebívá drak");
-        Prostor pokladnice  = new Prostor("pokladnice","Pokladnice, kde je ukryt diamant");
+        Prostor chaloupka   = new Prostor("chaloupka","Chaloupka, ve které si se narodil", 110, 50);
+        Prostor rozcesti    = new Prostor("rozcesti", "Rozcestí, které vede na mnoho míst", 20, 50);
+        Prostor les         = new Prostor("les","Les, kde se ukrývá medvěd. Pokud ho zabiješ, získáš peníze, za které si můžeš doplnit životy", 90, 60);
+        Prostor prikop      = new Prostor("prikop","Příkop, ve kterém je krokodýl, který hlídá vstup do hradu", 70, 25);
+        Prostor hrad        = new Prostor("hrad","Opuštěný hrad", 40, 84);
+        Prostor zbrojnice   = new Prostor("zbrojnice","Zbrojnice, ve které můžeš nalézt užitečné předměty", 70, 65);
+        Prostor kovarna     = new Prostor("kovarna","Kovárna, kde si můžeš nabrousit meč", 63, 20);
+        Prostor hospoda     = new Prostor("hospoda", "Hospoda, kde si můžeš dát pivo a doplnit si tak životy", 80, 50);
+        Prostor doupe       = new Prostor("doupe","Doupě, ve kterém žije trpaslík", 60, 70);
+        Prostor skrys       = new Prostor("skrys","Skrýš s dědictvím", 40, 65);
+        Prostor jeskyne     = new Prostor("jeskyne","Jeskyně, kde přebívá drak", 80, 70);
+        Prostor pokladnice  = new Prostor("pokladnice","Pokladnice, kde je ukryt diamant", 30, 70);
         
             prostory.put(chaloupka.getNazev(), chaloupka);
             prostory.put(rozcesti.getNazev(), rozcesti);
@@ -156,6 +156,7 @@ public class HerniPlan {
      */
     public void setAktualniProstor(Prostor prostor) {
        aktualniProstor = prostor;
+       notifyObservers();
     }
     /**
      *  Metoda vrací odkaz na aktuální prostor, ve ktetém se hráč právě nachází.
@@ -212,5 +213,22 @@ public class HerniPlan {
             return true;
         }
             return false;
+    }
+
+    @Override
+    public void registerObserver(Observer observer) {
+        listObserveru.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        listObserveru.remove(observer);
+    }
+       
+    @Override
+    public void notifyObservers() {
+        for (Observer listObserveruItem : listObserveru) {
+            listObserveruItem.update();
+        }
     }
 }

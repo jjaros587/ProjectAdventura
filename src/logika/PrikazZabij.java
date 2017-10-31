@@ -83,7 +83,7 @@ class PrikazZabij implements IPrikaz {
                 
                 odpoved = "Zabil jsi postavu " + kohoZabit;
                 
-                if(kohoZabit.equals("krokodýl")){
+                if(kohoZabit.equals("krokodyl")){
                     plan.vyberProstor("hrad").setZamceno(false);
                     
                     odpoved += ". Cesta do hradu je nyní volná.\n";

@@ -1,3 +1,4 @@
+
 /* Soubor je ulozen v kodovani UTF-8.
  * Kontrola kódování: Příliš žluťoučký kůň úpěl ďábelské ódy. */
 package logika;
@@ -45,6 +46,7 @@ public interface IHra
      *@param  radek  text, který zadal uživatel jako příkaz do hry.
      *@return          vrací se řetězec, který se má vypsat na obrazovku
      */
+     
      public String zpracujPrikaz(String radek);
    
     

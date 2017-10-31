@@ -44,13 +44,13 @@ class PrikazNabrousit implements IPrikaz {
         
         Prostor aktualniProstor = plan.getAktualniProstor();
 
-        if (aktualniProstor.getNazev().equals("kovárna")) {
+        if (aktualniProstor.getNazev().equals("kovarna")) {
             
             if (batoh.obsahujeVec(coNabrousit)){
             
-                if (coNabrousit.equals("meč")){
+                if (coNabrousit.equals("mec")){
                     
-                    batoh.vyberVec("meč").setUtok(2);
+                    batoh.vyberVec("mec").setUtok(2);
                     
                     hrac.setUtok(hrac.getUtok()+1);
                     

@@ -1,3 +1,4 @@
+
 package logika;
 
 /**
@@ -156,4 +157,3 @@ public class Hra implements IHra {
         return hrac;
     }
 }
-
