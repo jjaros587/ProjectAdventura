@@ -1,8 +1,9 @@
 package logika;
 
-import java.util.*;
-
-
+import java.util.ArrayList;
+import java.util.List;
+import utils.Observer;
+import utils.Subject;
 
 /*******************************************************************************
  * Instance třídy {@code Postava} představují ...
@@ -16,10 +17,13 @@ public class Postava
     private String jmeno;
     private String popis;
     private boolean jdeZabit;
+    private boolean lzeDat = false;
     private boolean zije;
     private int pocetZivotu;
     private int utok;
     private int odmena;
+    private List<Observer> listObserveru = new ArrayList<Observer>();
+
 
     //##########################################################################
     //== KONSTRUKTORY A TOVÁRNÍ METODY =========================================
@@ -35,6 +39,7 @@ public class Postava
         this.jmeno      = jmeno;
         this.popis      = popis;
         this.jdeZabit   = jdeZabit;
+        this.lzeDat     = lzeDat;
     }
     /**
      * Vytvoření postavy se zadaným jménem, popisem a možností zabití
@@ -125,10 +130,22 @@ public class Postava
     /**
      *  Metoda nastaví, jestli postava žije nebo ne
      *
-     *@param  true - postava žije, false - postava nežije
+     *@param zije:  true - postava žije, false - postava nežije
      */ 
     public void setZije(boolean zije){
         this.zije = zije;
+    }
+
+    public boolean getLzeDat() {
+        return lzeDat;
+    }
+    /**
+     *  Metoda nastaví, možnost dát věc postavě
+     *
+     *@param  lzeDat: true - postavě lze něco dát, false - postava nelze nic dát
+     */ 
+    public void setLzeDat(boolean lzeDat){    
+        this.lzeDat = lzeDat;
     }
     /**
      *  Metoda vrátí počet životů postavy

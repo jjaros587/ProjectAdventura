@@ -10,6 +10,7 @@ package logika;
 class PrikazBatoh implements IPrikaz {
     private static final String NAZEV = "batoh";
     private Batoh batoh;
+    private HerniPlan plan;
     
     /**
     *  Konstruktor třídy
@@ -38,6 +39,11 @@ class PrikazBatoh implements IPrikaz {
     @Override
     public String getNazev() {
         return NAZEV;
+    }
+    
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
 
 }

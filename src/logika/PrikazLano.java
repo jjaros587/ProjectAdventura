@@ -39,18 +39,19 @@ class PrikazLano implements IPrikaz {
         }
 
         String smer = parametry[0];
-        Prostor aktualniProstor = plan.getAktualniProstor();
+        Prostor sousedniProstor = plan.getAktualniProstor().vratSousedniProstor(smer);
         
         if(!batoh.obsahujeVec("lano")){
             
             return "Nejdřív musíš sebrat lano\n";   
         }
 
-        if (smer.equals("doupě")) {
-            
-            aktualniProstor.setVychod(plan.vyberProstor("doupě"));
+        if (smer.equals("doupe") & sousedniProstor != null) {
+                        
+            plan.vyberProstor("doupe").setViditelna(true);
             
             batoh.vyhodVec("lano");
+            updateHerniPlan();
             
             return "Natáhl jsi lano k doupěti trpaslíka. Nyní můžeš projít\n";
         }
@@ -69,5 +70,8 @@ class PrikazLano implements IPrikaz {
     public String getNazev() {
         return NAZEV;
     }
-
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
+    }
 }

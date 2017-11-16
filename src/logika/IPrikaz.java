@@ -28,5 +28,7 @@ interface IPrikaz {
      *  @return nazev prikazu
      */
 	public String getNazev();
+        
+        public void updateHerniPlan();
 	
 }

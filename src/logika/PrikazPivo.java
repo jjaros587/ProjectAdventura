@@ -64,5 +64,9 @@ class PrikazPivo implements IPrikaz {
     public String getNazev() {
         return NAZEV;
     }
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
+    }
 
 }

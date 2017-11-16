@@ -3,9 +3,8 @@
  * Kontrola kódování: Příliš žluťoučký kůň úpěl ďábelské ódy. */
 package logika;
 
-
-
-
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  *  Rozhraní které musí implementovat hra, je na ně navázáno uživatelské rozhraní
@@ -57,7 +56,21 @@ public interface IHra
      *  @return     odkaz na herní plán
      */
      public HerniPlan getHerniPlan();
-    
+     /**
+     * Metoda vrátí odkaz na hráče
+     * 
+     * @return odkaz na hráče
+     */
+     public Hrac getHrac();
+     /**
+     * Metoda vrátí odkaz batohu
+     * 
+     * @return odkaz na batoh
+     */
+     public Batoh getBatoh();
+     
+     public SeznamPrikazu getPlatnePrikazy();
+        
     //== ZDĚDĚNÉ METODY ========================================================
-    //== INTERNÍ DATOVÉ TYPY ===================================================
+    //== INTERNÍ DATOVÉ TYPY ===================================================   
 }

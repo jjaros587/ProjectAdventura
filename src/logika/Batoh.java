@@ -1,6 +1,14 @@
 package logika;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import utils.Observer;
+import utils.Subject;
+
 
 /*******************************************************************************
  * Instance třídy {@code Mistnost} představují ...
@@ -8,13 +16,16 @@ import java.util.*;
  * @author  Jakub Jaroš
  * @version pro školní rok 2015/2016
  */
-public class Batoh
+public class Batoh implements Subject
 {
     //== KONSTANTNÍ ATRIBUTY TŘÍDY =============================================
     private int kapacita = 4;
     
     //== PROMĚNNÉ ATRIBUTY TŘÍDY ===============================================
     private Map<String, Vec> seznamVeci;
+    
+    private List<Observer> listObserveru = new ArrayList<Observer>();
+    
 
     //##########################################################################
     //== KONSTRUKTORY A TOVÁRNÍ METODY =========================================
@@ -57,7 +68,7 @@ public class Batoh
             seznamVeci.put(vec.getNazev(), vec);
             
             if(seznamVeci.containsKey(vec.getNazev())){
-                
+                notifyObservers();
                 return true;
             }
             return false;
@@ -75,8 +86,10 @@ public class Batoh
      *@return  Odkaz na vyhozenou věc
      */ 
     public Vec vyhodVec (String nazevVeci)
-    {
-        return seznamVeci.remove(nazevVeci);            
+    {  
+        Vec vec =  seznamVeci.remove(nazevVeci);
+        notifyObservers();
+        return vec;            
     }
     /**
      *  Metoda zjistí, jestli je daná věc v batohu
@@ -99,5 +112,38 @@ public class Batoh
     public Vec vyberVec(String nazevVeci){
         
         return seznamVeci.get(nazevVeci);
+    }
+    /**
+     * Vrací názvy věcí, které jsou v inventáři
+     *
+     * @return kolekce věcí
+     */
+    public Collection<String> getVeciVBatohu() {
+        return Collections.unmodifiableCollection(seznamVeci.keySet());
+    }
+    /**
+     * Registrace observeru
+     * @param observer Observer
+     */
+    @Override
+    public void registerObserver(Observer observer) {
+        listObserveru.add(observer);
+    }
+    /**
+     * Zrušení observeru
+     * @param observer Observer
+     */
+    @Override
+    public void removeObserver(Observer observer) {
+        listObserveru.remove(observer);
+    }
+    /**
+     * Oznámení observeru
+     */   
+    @Override
+    public void notifyObservers() {
+        for (Observer listObserveruItem : listObserveru) {
+            listObserveruItem.update();
+        }
     }
 }

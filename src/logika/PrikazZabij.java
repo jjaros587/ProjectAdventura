@@ -1,5 +1,10 @@
 package logika;
 
+import java.util.ArrayList;
+import java.util.List;
+import utils.Observer;
+import utils.Subject;
+
 /**
  *  Třída PrikazZabij implementuje pro hru příkaz zabij.
  *  Tato třída je součástí jednoduché textové hry.
@@ -49,17 +54,17 @@ class PrikazZabij implements IPrikaz {
         Postava postava = aktualniProstor.vyberPostavu(kohoZabit);
         
         if(postava == null) {
-            
+            updateHerniPlan();
             return "Taková postava se v prostoru nenachází\n";
         } 
             
         if (!postava.jdeZabit()) {
-            
+            updateHerniPlan();
             return "Nemůžeš zabít " + kohoZabit+"\n";
         }
         
         if(!postava.getZije()){
-            
+            updateHerniPlan();
             return "Dvakrát stejnou postavu nezabiješ\n";
         }
         String odpoved = null;
@@ -91,11 +96,11 @@ class PrikazZabij implements IPrikaz {
                 
                 if(kohoZabit.equals("drak")){
                     plan.vyberProstor("pokladnice").setZamceno(false);
-                    batoh.vlozVec(new Vec("dračí_sklo", true, false));
+                    batoh.vlozVec(new Vec("draci_sklo", true, false));
                     
                     odpoved += ". Nyní můžeš vstoupit do pokladnice.\nNavíc si získal dračí sklo\n";
                 }
-
+                updateHerniPlan();
                 return "Tvoje životy: "+ zivoty+"\n"
                         +odpoved+"\n";
 
@@ -106,11 +111,12 @@ class PrikazZabij implements IPrikaz {
             if(zivoty <=0){
                 
                 hrac.setZivoty(zivoty);
-                
+                updateHerniPlan();
                 return "Byl si zabit\n";
 
             }
-        } 
+        }
+        updateHerniPlan();
         return "";
     }
     
@@ -123,5 +129,11 @@ class PrikazZabij implements IPrikaz {
     public String getNazev() {
         return NAZEV;
     }
+
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
+    }
+
 
 }

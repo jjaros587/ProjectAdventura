@@ -45,15 +45,16 @@ class PrikazMluv implements IPrikaz {
             
             return "Taková postava se v prostoru nenachází\n";
         }
-        if (!jmenoPostavy.equals("trpaslík")){
+        if (!jmenoPostavy.equals("trpaslik")){
+            updateHerniPlan();
             
             return "S touto postavou nemůžeš mluvit\n";
         }
         
-        plan.vyberProstor("rozcestí").setVychod(plan.vyberProstor("jeskyně"));
-        plan.vyberProstor("jeskyně").setViditelna(true);
-        plan.vyberProstor("jeskyně").setZamceno(false);
-        
+        plan.vyberProstor("rozcesti").setVychod(plan.vyberProstor("jeskyne"));
+        plan.vyberProstor("jeskyne").setViditelna(true);
+        plan.vyberProstor("jeskyne").setZamceno(false);
+        updateHerniPlan();
         return     "JÁ: Poslal mě za tebou můj otec. Prý u tebe schoval poklad.\n\n"
                  + "TRPASLÍK: Ano, schoval. Ale klíč od skrýše ti dám pouze, když mi přineseš diamant, který hlídá drak\n\n"
                  + "K drakovi se dostaš z rozcestí\n\n"
@@ -70,5 +71,8 @@ class PrikazMluv implements IPrikaz {
     public String getNazev() {
         return NAZEV;
     }
-
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
+    }
 }

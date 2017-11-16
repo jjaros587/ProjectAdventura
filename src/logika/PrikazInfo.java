@@ -47,20 +47,26 @@ class PrikazInfo implements IPrikaz {
         String jmenoPostavy = parametry[0];
         
         Postava postava = plan.getAktualniProstor().vyberPostavu(jmenoPostavy);
+        
+        String odpoved = "";
 
         if (postava == null) {
             
-            return "Taková postava se v prostoru nevyskytuje\n";
+            odpoved = "Taková postava se v prostoru nevyskytuje\n";
         }
-        if(postava.jdeZabit()){
+        if(postava.jdeZabit() & postava.getZije()){
            
-            return  postava.getPopis() + "\n"
+            odpoved =  postava.getPopis() + "\n"
                     + "Životy: "+ postava.getPocetZivotu() + "\n"
                     + "Útok: "  + postava.getPocetZivotu() + "\n"; 
         }
-        else{
-            return  postava.getPopis()+ "\n";      
+        if(!postava.jdeZabit()){
+            odpoved =  postava.getPopis()+ "\n";      
         }
+        if (postava.jdeZabit() & !postava.getZije()){
+            odpoved = jmenoPostavy + " je již mrtvý";
+        }
+        return odpoved;
     }
     
     /**
@@ -71,6 +77,11 @@ class PrikazInfo implements IPrikaz {
     @Override
     public String getNazev() {
         return NAZEV;
+    }
+    
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
 
 }

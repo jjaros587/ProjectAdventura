@@ -47,4 +47,8 @@ class PrikazKonec implements IPrikaz {
     public String getNazev() {
         return NAZEV;
     }
+    @Override
+    public void updateHerniPlan() {
+        hra.getHerniPlan().notifyObservers();
+    }
 }

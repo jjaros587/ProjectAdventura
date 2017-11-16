@@ -15,7 +15,7 @@ import java.util.Map;
  *@author     Michael Kolling, Lubos Pavlicek, Jarmila Pavlickova
  *@version    pro školní rok 2015/2016
  */
-class SeznamPrikazu {
+public class SeznamPrikazu {
 
     private  Map<String,IPrikaz> mapaSPrikazy;
     

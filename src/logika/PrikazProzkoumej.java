@@ -71,7 +71,7 @@ class PrikazProzkoumej implements IPrikaz {
         odpoved += "Nyní je můžeš sebrat.\n";
         
         vec.vratSeznamVeci().clear();
-
+        updateHerniPlan();
         return odpoved;
     }
     
@@ -83,6 +83,10 @@ class PrikazProzkoumej implements IPrikaz {
     @Override
     public String getNazev() {
         return NAZEV;
+    }
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
 
 }

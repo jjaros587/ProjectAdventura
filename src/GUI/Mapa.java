@@ -16,39 +16,65 @@ import utils.Observer;
 
 /**
  *
- * @author Acer
+ * @author Jakub Jaroš
+ * @version ZS 2017
  */
 public class Mapa extends AnchorPane implements Observer{
     
     private IHra hra;
     private Circle tecka;
+    private ImageView obrazekImageView;
     
+    /**
+    *  Konstruktor třídy
+    *  
+    *  @param hra 
+    */ 
     public Mapa (IHra hra){
         this.hra = hra;
         hra.getHerniPlan().registerObserver(this);
         init();
     }
-    
+    /**
+    *  Úvodní nastavení mapy hry
+    *  
+    */ 
     private void init(){
-        ImageView obrazekImageView = new ImageView(new Image(Main.class.getResourceAsStream("/zdroje/PlanHry2.jpg"),300,200,false,true));      
-        tecka = new Circle(10, Paint.valueOf("red"));
+
+        tecka = new Circle(10, Paint.valueOf("black"));
+        
+        obrazekImageView = new ImageView(new Image(Main.class.getResourceAsStream("/zdroje/mapa1.png"),400,600,false,true));
         
         this.getChildren().addAll(obrazekImageView, tecka);
         update();
     }
-    
-    public void newGame(IHra novaHra){
+    /**
+     * Restartování adventury
+     *
+     * @param hra Nová hra
+     */
+    public void novaHra(IHra novaHra){
         hra.getHerniPlan().removeObserver(this);
         hra = novaHra;
         hra.getHerniPlan().registerObserver(this);
         update();
     }
-
+    /**
+    *  Update mapy hry a pohybu po mapě
+    *  
+    */
     @Override
     public void update() {
-        this.setTopAnchor(tecka, hra.getHerniPlan().getAktualniProstor().getPosTop());
-        this.setLeftAnchor(tecka, hra.getHerniPlan().getAktualniProstor().getPosLeft());
-        
-    }
-    
+                    
+        if(hra.getHerniPlan().vyberProstor("jeskyne").isViditelna()){
+            
+            this.getChildren().clear();
+
+            obrazekImageView = new ImageView(new Image(Main.class.getResourceAsStream("/zdroje/mapa2.png"),400,600,false,true));
+            this.getChildren().addAll(obrazekImageView, tecka);
+        }
+     
+        this.setTopAnchor(tecka, hra.getHerniPlan().getAktualniProstor().getPosTop() + 10);
+        this.setLeftAnchor(tecka, hra.getHerniPlan().getAktualniProstor().getPosLeft() + 20);       
+    }   
 }

@@ -30,9 +30,6 @@ public class HerniPlan implements Subject{
     public HerniPlan() {
         zalozProstoryHry();
         this.prohra = prohra;
-
-        
-
     }
     /**
      *  Vytváří jednotlivé prostory a propojuje je pomocí východů.
@@ -43,18 +40,18 @@ public class HerniPlan implements Subject{
         //== PROSTORY ======================================================
         prostory = new HashMap<>();
         this.prohra = prohra;
-        Prostor chaloupka   = new Prostor("chaloupka","Chaloupka, ve které si se narodil", 110, 50);
-        Prostor rozcesti    = new Prostor("rozcesti", "Rozcestí, které vede na mnoho míst", 20, 50);
-        Prostor les         = new Prostor("les","Les, kde se ukrývá medvěd. Pokud ho zabiješ, získáš peníze, za které si můžeš doplnit životy", 90, 60);
-        Prostor prikop      = new Prostor("prikop","Příkop, ve kterém je krokodýl, který hlídá vstup do hradu", 70, 25);
-        Prostor hrad        = new Prostor("hrad","Opuštěný hrad", 40, 84);
-        Prostor zbrojnice   = new Prostor("zbrojnice","Zbrojnice, ve které můžeš nalézt užitečné předměty", 70, 65);
-        Prostor kovarna     = new Prostor("kovarna","Kovárna, kde si můžeš nabrousit meč", 63, 20);
-        Prostor hospoda     = new Prostor("hospoda", "Hospoda, kde si můžeš dát pivo a doplnit si tak životy", 80, 50);
-        Prostor doupe       = new Prostor("doupe","Doupě, ve kterém žije trpaslík", 60, 70);
-        Prostor skrys       = new Prostor("skrys","Skrýš s dědictvím", 40, 65);
-        Prostor jeskyne     = new Prostor("jeskyne","Jeskyně, kde přebívá drak", 80, 70);
-        Prostor pokladnice  = new Prostor("pokladnice","Pokladnice, kde je ukryt diamant", 30, 70);
+        Prostor chaloupka   = new Prostor("chaloupka","Chaloupka, ve které si se narodil", 150, 450);
+        Prostor rozcesti    = new Prostor("rozcesti", "Rozcestí, které vede na mnoho míst", 150, 350);
+        Prostor les         = new Prostor("les","Les, kde se ukrývá medvěd. Pokud ho zabiješ, získáš peníze, za které si můžeš doplnit životy", 150, 250);
+        Prostor prikop      = new Prostor("prikop","Příkop, ve kterém je krokodýl, který hlídá vstup do hradu", 150, 150);
+        Prostor hrad        = new Prostor("hrad","Opuštěný hrad", 0, 0);
+        Prostor zbrojnice   = new Prostor("zbrojnice","Zbrojnice, ve které můžeš nalézt užitečné předměty", 50, 0);
+        Prostor kovarna     = new Prostor("kovarna","Kovárna, kde si můžeš nabrousit meč", 250, 0);
+        Prostor hospoda     = new Prostor("hospoda", "Hospoda, kde si můžeš dát pivo a doplnit si tak životy", 0, 500);
+        Prostor doupe       = new Prostor("doupe","Doupě, ve kterém žije trpaslík", 0, 350);
+        Prostor skrys       = new Prostor("skrys","Skrýš s dědictvím", 0, 200);
+        Prostor jeskyne     = new Prostor("jeskyne","Jeskyně, kde přebívá drak", 300, 350);
+        Prostor pokladnice  = new Prostor("pokladnice","Pokladnice, kde je ukryt diamant", 300, 250);
         
             prostory.put(chaloupka.getNazev(), chaloupka);
             prostory.put(rozcesti.getNazev(), rozcesti);
@@ -70,11 +67,14 @@ public class HerniPlan implements Subject{
             prostory.put(pokladnice.getNazev(), pokladnice);
         
             skrys.setZamceno(true);
+            skrys.setLzeOdemknoutHracem(true);
             hrad.setZamceno(true);
             pokladnice.setZamceno(true);
             
             jeskyne.setViditelna(false);
             jeskyne.setZamceno(true);
+            
+            doupe.setViditelna(false);
              
             
 
@@ -86,6 +86,7 @@ public class HerniPlan implements Subject{
         rozcesti.setVychod(hospoda);
         rozcesti.setVychod(les);
         rozcesti.setVychod(chaloupka);   
+        rozcesti.setVychod(doupe); 
           
         les.setVychod(rozcesti);
         les.setVychod(prikop);
@@ -114,9 +115,11 @@ public class HerniPlan implements Subject{
         
         //== POSTAVY ======================================================
         Postava trpaslik    = new Postava("trpaslik", "Trpaslík vlastní klíč od skrýše s pokladem, který ti předá, pokud splníš jeho úkol", false);
+            trpaslik.setLzeDat(true);
         Postava drak        = new Postava("drak", "Pokud zabiješ draka, otevřou se dveře do pokladnice", true, true, 8, 3, 0);
         Postava medved      = new Postava("medved", "Pokud zabiješ medvěda, dostaneš 2 zlaťáky", true, true, 2, 2, 1);
         Postava krokodyl    = new Postava("krokodyl", "Pokud zabiješ krokodýla, můžeš vstoupit do hradu a dostaneš 2 zlaťáky",true, true, 2, 1, 1);
+        
         
             //-- vložení postav ----------------------------
             doupe.vlozPostavu(trpaslik);
@@ -147,6 +150,7 @@ public class HerniPlan implements Subject{
      *@return     aktuální prostor
      */
     public Prostor getAktualniProstor() {
+        
         return aktualniProstor;
     }
     /**
@@ -166,8 +170,7 @@ public class HerniPlan implements Subject{
     public Vec getKlic(){
         
         return klic;
-    }
-    
+    }   
     /**
      *  Metoda slouží k vložení prostoru do seznamu prostorů
      *
@@ -214,17 +217,25 @@ public class HerniPlan implements Subject{
         }
             return false;
     }
-
+    /**
+     * Registrace observeru
+     * @param observer Observer
+     */
     @Override
     public void registerObserver(Observer observer) {
         listObserveru.add(observer);
     }
-
+    /**
+     * Zrušení observeru
+     * @param observer Observer
+     */
     @Override
     public void removeObserver(Observer observer) {
         listObserveru.remove(observer);
     }
-       
+    /**
+     * Oznámení observeru
+     */   
     @Override
     public void notifyObservers() {
         for (Observer listObserveruItem : listObserveru) {

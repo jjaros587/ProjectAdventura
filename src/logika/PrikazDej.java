@@ -38,17 +38,18 @@ public class PrikazDej implements IPrikaz
             
             return "Nevím komu mám co dát! Tvar příkazu: dej [věc] [postava]\n";  
         }
-        
+        String odpoved = "";
         Prostor aktualniProstor = plan.getAktualniProstor();
         
         String vec = parametry[0];
-        String postava = parametry[1];
+        String jmenoPostavy = parametry[1];
+        Postava postava = aktualniProstor.vyberPostavu(jmenoPostavy);
 
-        if(!aktualniProstor.obsahujePostavu(postava)){
+        if(!aktualniProstor.obsahujePostavu(jmenoPostavy)){
             
             return "Taková postava se v prostoru nenachází\n";
         }
-        if(!postava.equals("trpaslík")){
+        if(!postava.getLzeDat()){
             
             return "Této postavě nemůžeš nic dát\n";
         }
@@ -56,17 +57,19 @@ public class PrikazDej implements IPrikaz
               
             return "Tuto věc nemáš v batohu\n";
         }
-        if(!vec.equals("diamant")){
+        if(jmenoPostavy.equals("trpaslik")){          
+            if(!vec.equals("diamant")){
+
+                return "Tuto věc nemůžeš trpaslíkovi dát\n";
+            } else{
             
-            return "Tuto věc nemůžeš trpaslíkovi dát\n";
+            batoh.vyhodVec(vec);
+            batoh.vlozVec(plan.getKlic());
+            odpoved = "Získal si klíč od skrýše\n";
+            }
         }
         
-        batoh.vyhodVec(vec);
-        batoh.vlozVec(plan.getKlic());
-        
-        return "Získal si klíč od skrýše\n";
-        
-        
+        return odpoved;
     }
 
     /**
@@ -78,5 +81,10 @@ public class PrikazDej implements IPrikaz
     public String getNazev()
     {
         return NAZEV;
+    }
+    
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
 }

@@ -32,14 +32,14 @@ class PrikazPlanek implements IPrikaz {
      */ 
     @Override
     public String proved(String... parametry) {
-        URL umisteniObrazku = this.getClass().getResource("PlanHry2.jpg");
-        URL umisteniObrazku2 = this.getClass().getResource("PlanHry1.jpg");
+        URL umisteniObrazku = this.getClass().getResource("zdroje/mapa2.png");
+        URL umisteniObrazku2 = this.getClass().getResource("zdroje/mapa1.png");
         
-        if(plan.vyberProstor("jeskyně").isViditelna() && umisteniObrazku != null){
+        if(plan.vyberProstor("jeskyne").isViditelna() && umisteniObrazku != null){
             final ImageIcon icon = new ImageIcon(umisteniObrazku);
             JOptionPane.showMessageDialog(null,"","Plánek", JOptionPane.INFORMATION_MESSAGE, icon); 
         }
-        else if(plan.vyberProstor("jeskyně").isViditelna() == false && umisteniObrazku2 != null){
+        else if(plan.vyberProstor("jeskyne").isViditelna() == false && umisteniObrazku2 != null){
             final ImageIcon icon = new ImageIcon(umisteniObrazku2);
             JOptionPane.showMessageDialog(null,"","Plánek", JOptionPane.INFORMATION_MESSAGE, icon); 
         }
@@ -55,6 +55,10 @@ class PrikazPlanek implements IPrikaz {
     @Override
     public String getNazev() {
         return NAZEV;
+    }
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
 
 }

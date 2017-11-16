@@ -11,6 +11,7 @@ class PrikazVyhod implements IPrikaz {
     private static final String NAZEV = "vyhod";
     private HerniPlan plan;
     private Batoh batoh;
+    private Hrac hrac;
     
     /**
     *  Konstruktor třídy
@@ -18,9 +19,10 @@ class PrikazVyhod implements IPrikaz {
     *  @param plan herní plán, ve kterém se bude ve hře "chodit" 
     *  @param batoh, do kterého se vkládají věci
     */    
-    public PrikazVyhod(HerniPlan plan, Batoh batoh) {
+    public PrikazVyhod(HerniPlan plan, Batoh batoh, Hrac hrac) {
         this.plan   = plan;
         this.batoh  = batoh;
+        this.hrac   = hrac;
     }
 
     /**
@@ -39,7 +41,7 @@ class PrikazVyhod implements IPrikaz {
         String coVyhodit = parametry[0];
 
         Prostor aktualniProstor = plan.getAktualniProstor();
-        Vec vyhodit             = batoh.vyhodVec(coVyhodit);
+        Vec vyhodit = batoh.vyberVec(coVyhodit);
 
 
         if (coVyhodit == null) {
@@ -48,10 +50,22 @@ class PrikazVyhod implements IPrikaz {
         }
         else {
             
+            String odpoved = "Vyhodil si z batohu "+ coVyhodit +". Pokud budeš vět potřebovat najdeš jí v "
+                            + aktualniProstor.getNazev() + ", kde jsi ji zanechal.\n";
+            
             aktualniProstor.vlozVec(vyhodit);
+            
+            if(vyhodit.jeZbran()){
                 
-            return "Vyhodil si z batohu "+ coVyhodit +". Pokud budeš vět potřebovat najdeš jí v "
-                    + aktualniProstor.getNazev() + ", kde jsi ji zanechal.\n";
+                int utok    = hrac.getUtok();
+                utok       -= vyhodit.getUtok();
+                
+                hrac.setUtok(utok);
+                
+                odpoved += "\nTvůj útok je nyní: " + utok;
+            }
+            batoh.vyhodVec(coVyhodit);
+            return odpoved;
             
         }
     }
@@ -64,6 +78,11 @@ class PrikazVyhod implements IPrikaz {
     @Override
     public String getNazev() {
         return NAZEV;
+    }
+    
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
 
 }

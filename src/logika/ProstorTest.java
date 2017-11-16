@@ -38,8 +38,8 @@ public class ProstorTest
     @Before
     public void setUp()
     {
-        prostor1 = new Prostor("hospoda", "V hospodě si můžeš doplnit životy");
-        prostor2 = new Prostor("rozcestí", "Rozcestí vede na mnoho míst");
+//        prostor1 = new Prostor("hospoda", "V hospodě si můžeš doplnit životy");
+//        prostor2 = new Prostor("rozcestí", "Rozcestí vede na mnoho míst");
         vec = new Vec("meč", true, true);
         vec_klic = new Vec("klic", true, false);
         postava = new Postava("drak", "Drak hlídá pokladnici", true);

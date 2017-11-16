@@ -12,6 +12,7 @@ class PrikazNapoveda implements IPrikaz {
     
     private static final String NAZEV = "napoveda";
     private SeznamPrikazu platnePrikazy;
+    private HerniPlan plan;
     
     
      /**
@@ -47,5 +48,9 @@ class PrikazNapoveda implements IPrikaz {
       public String getNazev() {
         return NAZEV;
      }
+      @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
+    }
 
 }

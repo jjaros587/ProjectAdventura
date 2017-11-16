@@ -15,10 +15,13 @@ package logika;
 
 public class Hra implements IHra {
     private SeznamPrikazu platnePrikazy;
+
+    public SeznamPrikazu getPlatnePrikazy() {
+        return platnePrikazy;
+    }
     private HerniPlan herniPlan;
     private Batoh batoh;
     private Hrac hrac;
-    private Hra hra;
     private boolean konecHry = false;
 
     /**
@@ -30,7 +33,8 @@ public class Hra implements IHra {
         herniPlan   = new HerniPlan(); 
         batoh       = new Batoh();
                     
-            Vec mec = new Vec("meč", true, true, 1);
+            Vec mec = new Vec("mec", true, true, 1);
+            mec.setNabrouseno(false);
             batoh.vlozVec(mec);
             
         //--- PŘÍKAZY =========================
@@ -41,11 +45,11 @@ public class Hra implements IHra {
         platnePrikazy.vlozPrikaz(new PrikazJdi(herniPlan));
         platnePrikazy.vlozPrikaz(new PrikazBatoh(batoh));
         platnePrikazy.vlozPrikaz(new PrikazSeber(herniPlan, batoh, hrac));
-        platnePrikazy.vlozPrikaz(new PrikazVyhod(herniPlan, batoh));
+        platnePrikazy.vlozPrikaz(new PrikazVyhod(herniPlan, batoh, hrac));
         platnePrikazy.vlozPrikaz(new PrikazOdemkni(herniPlan, batoh));
         platnePrikazy.vlozPrikaz(new PrikazLano(herniPlan, batoh));
         platnePrikazy.vlozPrikaz(new PrikazPivo(herniPlan, hrac));
-        platnePrikazy.vlozPrikaz(new PrikazZabij(herniPlan, batoh, hrac, hra));
+        platnePrikazy.vlozPrikaz(new PrikazZabij(herniPlan, batoh, hrac, this));
         platnePrikazy.vlozPrikaz(new PrikazNabrousit(herniPlan, batoh, hrac));
         platnePrikazy.vlozPrikaz(new PrikazDej(herniPlan, batoh));
         platnePrikazy.vlozPrikaz(new PrikazPlanek(herniPlan));

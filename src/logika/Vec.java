@@ -2,6 +2,7 @@ package logika;
 
 import java.util.*;
 
+
 /*******************************************************************************
  * Instance třídy Vec představují věci v místnostech nebo v batohu.
  * 
@@ -16,6 +17,7 @@ public class Vec
     private boolean sebratelna;
     private boolean jeZbran;
     private boolean lzeProzkoumat = false;
+    private boolean nabrouseno = true;
     private Map<String, Vec> seznamVeci;
     private int utok;
 
@@ -28,7 +30,6 @@ public class Vec
     public Vec(String nazev, boolean sebratelna, boolean jeZbran) {
         this.nazev          = nazev;
         this.sebratelna     = sebratelna;
-        this.jeZbran        = jeZbran;
         this.jeZbran        = jeZbran;
         this.lzeProzkoumat  = lzeProzkoumat;
         seznamVeci          = new HashMap<>();
@@ -45,6 +46,7 @@ public class Vec
         this.sebratelna     = sebratelna;
         this.jeZbran        = jeZbran;
         this.lzeProzkoumat  = lzeProzkoumat;
+        this.nabrouseno     = nabrouseno;
         this.utok           = utok;
         seznamVeci          = new HashMap<>();
     }
@@ -113,6 +115,11 @@ public class Vec
     public boolean isSebratelna() {
         return sebratelna;
     }
+    /**
+     * metoda zjišťuje, zda je věc zbraň
+     * 
+     * @return    true - věc je zbraň, false - věc není zbraň
+     */
     public boolean jeZbran() {
         return jeZbran;
     }
@@ -131,6 +138,22 @@ public class Vec
      */
     public void setUtok(int utok){
         this.utok = utok;
+    }
+    /**
+     * metoda zjišťuje, zda je zbraň nabroušena
+     * 
+     * @return    Nabrouseni zbraně
+     */
+    public boolean getNabrouseno(){
+        return nabrouseno;
+    }
+    /**
+     * metoda nastavuje, zda byla zbraň nabroušena
+     * 
+     * @param    nabrouseno
+     */
+    public void setNabrouseno(boolean nabrouseno){
+        this.nabrouseno = nabrouseno;
     }
     /**
      * metoda vrací, jestli je věc prozkoumána nebo ne

@@ -43,6 +43,7 @@ class PrikazNabrousit implements IPrikaz {
         String coNabrousit = parametry[0];
         
         Prostor aktualniProstor = plan.getAktualniProstor();
+        
 
         if (aktualniProstor.getNazev().equals("kovarna")) {
             
@@ -50,11 +51,19 @@ class PrikazNabrousit implements IPrikaz {
             
                 if (coNabrousit.equals("mec")){
                     
-                    batoh.vyberVec("mec").setUtok(2);
+                    Vec zbran = batoh.vyberVec(coNabrousit);
                     
-                    hrac.setUtok(hrac.getUtok()+1);
+                    if(!zbran.getNabrouseno()){
+                        
+                        zbran.setUtok(zbran.getUtok() + 1);
+                        zbran.setNabrouseno(true);
+                        hrac.setUtok(hrac.getUtok() + 1);
                     
-                    return "Nabrousil sis meč\n";
+                        return "Nabrousil sis meč\n";
+                    }
+                    else{
+                        return "Tuto věc nemůžeš nabrousit\n";
+                    }      
                 }
                 else {
                     
@@ -81,5 +90,8 @@ class PrikazNabrousit implements IPrikaz {
     public String getNazev() {
         return NAZEV;
     }
-
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
+    }
 }

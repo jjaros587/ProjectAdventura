@@ -1,7 +1,16 @@
 package logika;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.*;
+import utils.Subject;
+import utils.Observer;
 
 /**
  * Trida Prostor - popisuje jednotlivé prostory (místnosti) hry
@@ -15,7 +24,7 @@ import java.util.stream.*;
  * @author Michael Kolling, Lubos Pavlicek, Jarmila Pavlickova, Jakub Jaroš
  * @version pro školní rok 2015/2016 LS
  */
-public class Prostor {
+public class Prostor implements Subject{
     
     //== PROMĚNNÉ ATRIBUTY TŘÍDY ===============================================
     private String nazev;
@@ -28,6 +37,9 @@ public class Prostor {
     private Map<String, Postava> postavy;
     private double posLeft;
     private double posTop;
+    private boolean lzeOdemknout;
+    
+    private List<Observer> listObserveru = new ArrayList<Observer>();
 
     
     //##########################################################################
@@ -48,9 +60,10 @@ public class Prostor {
         this.posTop     = posTop;
         this.zamceno    = zamceno;
         this.viditelna  = viditelna;     
-        vychody         = new HashSet<>();
+        vychody         = new java.util.HashSet<>();
         veci            = new HashMap<>();
         postavy         = new HashMap<>();
+        this.lzeOdemknout = false;
     }
     /**
      * Metoda equals pro porovnání dvou prostorů. Překrývá se metoda equals ze
@@ -220,10 +233,37 @@ public class Prostor {
         
         return Collections.unmodifiableCollection(vychody);
     }
+    /**
+     * Vrací kolekci obsahující názvy věcí v prostoru
+     *
+     * @return Nemodifikovatelná kolekce názvů věcí, které jsou v prostoru
+     */
+    public Collection<String> getVeci() {
+        
+        return Collections.unmodifiableCollection(veci.keySet());
+    }
+    /**
+     * Vrací kolekci obsahující jména postav v prostoru
+     *
+     * @return Nemodifikovatelná kolekce jmen postav, které jsou v prostoru
+     */
+    public Collection<String> getPostavy() {
+        
+        return Collections.unmodifiableCollection(postavy.keySet());
+    }
+    /**
+     * Vrací pozici z leva
+     *
+     * @return pozice z leva (x)
+     */
     public double getPosLeft() {
         return posLeft;
     }
-
+    /**
+     * Vrací pozici od shora
+     *
+     * @return pozice z leva (y)
+     */
     public double getPosTop() {
         return posTop;
     }
@@ -235,6 +275,7 @@ public class Prostor {
     public void setVychod(Prostor vedlejsi) {
         
         vychody.add(vedlejsi);
+        notifyObservers();
     }
     /**
      *  Metoda nastaví viditelnost prostoru
@@ -244,6 +285,7 @@ public class Prostor {
     public void setViditelna(boolean viditelna){
         
         this.viditelna = viditelna;
+        notifyObservers();
     }
     /**
      *  Metoda vrací viditelnosto místnosti
@@ -264,6 +306,7 @@ public class Prostor {
     public void setZamceno(boolean zamceno){
         
         this.zamceno = zamceno;
+        notifyObservers();
     }
     /**
      * Vrací hodnotu true, pokud je místnost zamčena nebo false, pokud je odemčena
@@ -272,6 +315,22 @@ public class Prostor {
      */
     public boolean jeZamceno(){
         return zamceno;
+    }
+    /**
+     * Vrací hodnotu true, pokud je místnost lze odemknout nebo false, pokud nelze odemknout
+     *
+     * @return Možnost odemknutí prostoru
+     */
+    public boolean getLzeOdemknoutHracem(){
+        return lzeOdemknout;
+    }
+    /**
+     * Nastavuje možnost odemknutí místnosti hráčem
+     *
+     * @param lzeOdemknout: true - místnost lze odemknout hracem, false - místnost nelze odemknout hráčem
+     */
+    public void setLzeOdemknoutHracem(boolean lzeOdemknout){
+        this.lzeOdemknout = lzeOdemknout;
     }
     /**
      *  Metoda nastaví klíč k odemčení místnosti
@@ -299,6 +358,7 @@ public class Prostor {
     public void vlozVec (Vec vec){
         
         veci.put(vec.getNazev(), vec);
+        notifyObservers();
     }
     /**
      *  Metoda odebere věc ze seznamu věcí v prostoru
@@ -308,9 +368,9 @@ public class Prostor {
      *@return  odebíraná věc
      */
     public Vec odeberVec(String nazevVeci){
-        
-       return veci.remove(nazevVeci);
-        
+        Vec vec = veci.remove(nazevVeci);
+        notifyObservers();
+        return vec;       
     }
     /**
      *  Metoda vrací true, pokud je věc v místnosti a false, pokud není
@@ -378,4 +438,29 @@ public class Prostor {
         
         return postavy.get(jmenoPostavy);
     }   
+    /**
+     * Registrace observeru
+     * @param observer Observer
+     */
+    @Override
+    public void registerObserver(Observer observer) {
+        listObserveru.add(observer);
+    }
+    /**
+     * Zrušení observeru
+     * @param observer Observer
+     */
+    @Override
+    public void removeObserver(Observer observer) {
+        listObserveru.remove(observer);
+    }
+    /**
+     * Oznámení observeru
+     */   
+    @Override
+    public void notifyObservers() {
+        for (Observer listObserveruItem : listObserveru) {
+            listObserveruItem.update();
+        }
+    }
 }

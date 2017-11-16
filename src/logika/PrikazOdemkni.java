@@ -59,11 +59,15 @@ public class PrikazOdemkni implements IPrikaz
              
             return "Místnost již je odemčena.\n";
         }
+        if(!sousedniProstor.getLzeOdemknoutHracem()){
             
+            return "Tuto místnost nemůžeš odemknout sám, musíš splnit nějaký úkol.";
+        }    
         if(batoh.obsahujeVec(nazevKlice)) {
             
             sousedniProstor.setZamceno(false);
             batoh.vyhodVec(nazevKlice);
+            updateHerniPlan();
             return "Odemkl jsi " + odemknout+"\n";
         }
         
@@ -78,6 +82,10 @@ public class PrikazOdemkni implements IPrikaz
     @Override
     public String getNazev() {
         return NAZEV;
+    }
+    @Override
+    public void updateHerniPlan() {
+        plan.notifyObservers();
     }
   
 }

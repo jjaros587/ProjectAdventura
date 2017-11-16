@@ -1,5 +1,10 @@
 package logika;
 
+import java.util.ArrayList;
+import java.util.List;
+import utils.Observer;
+import utils.Subject;
+
 
 /*******************************************************************************
  * Instance třídy {@code Hrac} představuje hráče
@@ -7,13 +12,14 @@ package logika;
  * @author  Jakub Jaroš
  * @version pro školní rok 2015/2016
  */
-public class Hrac
+public class Hrac implements Subject
 {
     //== PROMĚNNÉ ATRIBUTY TŘÍDY ===============================================
     private int zivoty = 4;
     private int penize = 0;
     private int utok   = 1;
-
+    
+    private List<Observer> listObserveru = new ArrayList<Observer>();
     //##########################################################################
     //== KONSTRUKTORY A TOVÁRNÍ METODY =========================================
 
@@ -37,6 +43,7 @@ public class Hrac
     public void setZivoty(int zivoty){
         
         this.zivoty = zivoty;
+        notifyObservers();
     }
     /**
      *  Metoda nastaví počet zlaťáků, která hráč získal
@@ -46,6 +53,17 @@ public class Hrac
     public void setPenize(int penize){
         
         this.penize = penize;
+        notifyObservers();
+    }
+    /**
+     *  Metoda nastaví hodnotu útoku hráče
+     *
+     *@param  útok hráče
+     */ 
+    public void setUtok(int utok){
+        
+        this.utok = utok;
+        notifyObservers();
     }
     /**
      *  Metoda pro získání počtu životů hráče
@@ -75,12 +93,38 @@ public class Hrac
         return utok;
     }
     /**
-     *  Metoda nastaví hodnotu útoku hráče
+     *  Metoda pro výpis informací o hráči
      *
-     *@param  útok hráče
-     */ 
-    public void setUtok(int utok){
-        
-        this.utok = utok;
+     *@return  info o hráči
+     */
+    public String getInfoOHraci(){
+        return "Životy: "  + this.getZivoty() +"\n"
+             + "Útok: "    + this.getUtok()   +"\n"
+             + "Zlaťáky: " + this.getPenize();
+    }
+    /**
+     * Registrace observeru
+     * @param observer Observer
+     */
+    @Override
+    public void registerObserver(Observer observer) {
+        listObserveru.add(observer);
+    }
+    /**
+     * Zrušení observeru
+     * @param observer Observer
+     */
+    @Override
+    public void removeObserver(Observer observer) {
+        listObserveru.remove(observer);
+    }
+    /**
+     * Oznámení observeru
+     */   
+    @Override
+    public void notifyObservers() {
+        for (Observer listObserveruItem : listObserveru) {
+            listObserveruItem.update();
+        }
     }
 }
